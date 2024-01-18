@@ -22,11 +22,11 @@ if __name__ == "__main__":
     strDataset = "FB15K237"
     cfgs.default_entropy_dir_path = (
         # "./csv/FB15K237/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-        "./csv/FB15K237/PDF_Categorical_TRUE_Mixed_0.5_0.75/entropy_k_"
+        # "./csv/FB15K237/PDF_Categorical_TRUE_Mixed_0.5_0.75/entropy_k_"
         # "./csv/FB15K237/PER_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
         # "./csv/FB15K237/TOT_PDF_Trained_0.5_0.75/entropy_k_"
         # "./csv/FB15K237/FINAL_PDF_Trained_0.5_0.75/entropy_k_"
-        # "./csv/FB15K237/FINAL_NP_PDF_Trained_0.5_0.75/entropy_k_"
+        "./csv/FB15K237/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
         # "./csv/FB15K237/FINAL_PDF_PAIRED_Trained_0.5_0.75/entropy_k_"
     )
 
@@ -91,15 +91,18 @@ if __name__ == "__main__":
                     # cfgs.reverse_flag = True
 
                     if eval_norm_mode == "MINMAX":
-                        cfgs.entropy_normal_min = 3.125
+                        if "n_shannon" in type_entropy:
+                            cfgs.entropy_normal_min = 2.8125
+                        elif "c_shannon" in type_entropy:
+                            cfgs.entropy_normal_min = 3.125
+                        else:
+                            cfgs.entropy_normal_min = 3.125
 
                         # if "c_renyi" in type_entropy:
                         #     # cfgs.entropy_normal_min = 3.6875
                         #     cfgs.entropy_normal_min = 4.4531
 
-                        # elif "n_shannon" in type_entropy:
-                        #     cfgs.entropy_normal_min = 2.1875
-                        #     # cfgs.entropy_normal_min = 4.375
+                        # el # cfgs.entropy_normal_min = 4.375
 
                     else:
                         if "c_renyi" in type_entropy:

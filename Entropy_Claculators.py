@@ -1284,7 +1284,7 @@ if __name__ == "__main__":
     cfgs.MIN_HIT_PAIRED = False
     print(cfgs.NEW_AVG)
 
-    types = "FINAL_NP_PDF"
+    types = "TT"
     for ds in ["FB15K237", "FB15K", "WN18RR"]:
         # for ds in ["WN18RR"]:
         run_set(

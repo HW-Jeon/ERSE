@@ -32,5 +32,7 @@ if __name__ == "__main__":
             print(strModel)
             test_dataloader = TestDataLoader("./benchmarks/FB15K237/", "link")
 
-            tester = Tester(model=models[strModel], data_loader=test_dataloader, use_gpu=True)
+            tester = Tester(
+                model=models[strModel], data_loader=test_dataloader, use_gpu=True
+            )
             tester.run_link_prediction(type_constrain=False)

@@ -38,7 +38,7 @@ if __name__ == "__main__":
         # f"./csv/{strDataset}/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
         # f"./csv/{strDataset}/AVG_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
         # f"./csv/{strDataset}/TOT_PDF_Trained_0.5_0.75/entropy_k_"
-        f"./csv/{strDataset}/FINAL_NP_PDF_Trained_0.5_0.75/entropy_k_"
+        f"./csv/{strDataset}/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
         # f"./csv/{strDataset}/FINAL_PDF_PAIRED_Trained_0.5_0.75/entropy_k_"
     )
 

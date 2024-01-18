@@ -379,9 +379,9 @@ num_count_threshold = 0
 # -2: choose best rank model
 # -1: all weights are 1
 # num_count_thresholds = [-2, -1]
-num_count_thresholds = [5]
+# num_count_thresholds = [5]
 # num_count_thresholds = [-3]
-# num_count_thresholds = [-1]
+num_count_thresholds = [-1]
 
 types_of_entropy = "n_shannon"
 
@@ -559,7 +559,7 @@ Start_Index = 0
 # 5*NWeight
 NWeight = 4
 
-MIN_HIT_PAIRED = False
+MIN_HIT_PAIRED = True
 
 
 def change_Hit_Mode(strMode):
