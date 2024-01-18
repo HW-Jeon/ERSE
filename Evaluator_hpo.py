@@ -78,12 +78,8 @@ def recursive_evaluations(
         if neg_count >= 4 or weight <= 0.0005 or new_min > 5 or new_min < 0.5:
             return hit10, new_min
 
-    left, left_val = recursive_evaluations(
-        models, test_dataloader, hit10, round(new_min - weight, 4), new_min, neg_count
-    )
-    right, right_val = recursive_evaluations(
-        models, test_dataloader, hit10, round(new_min + weight, 4), new_min, neg_count
-    )
+    left, left_val = recursive_evaluations(models, test_dataloader, hit10, round(new_min - weight, 4), new_min, neg_count)
+    right, right_val = recursive_evaluations(models, test_dataloader, hit10, round(new_min + weight, 4), new_min, neg_count)
 
     if hit10 == max(hit10, left, right):
         return (hit10, new_min)
@@ -94,36 +90,30 @@ def recursive_evaluations(
 def set_FB15K237():
     cfgs.setDataset("FB15K237")
 
-    # cfgs.default_entropy_dir_path = "./csv/FB15K237/PDF_Categorical_ks_eh_Mixed_05_075/entropy_k_"
-    cfgs.default_entropy_dir_path = (
-        "./csv/FB15K237/PDF_Categorical_TRUE_Trained_0.5_0.75/entropy_k_"
-    )
+    # cfgs.default_entropy_dir_path = "./RSE_output/FB15K237/PDF_Categorical_ks_eh_Mixed_05_075/entropy_k_"
+    cfgs.default_entropy_dir_path = "./RSE_output/FB15K237/PDF_Categorical_TRUE_Trained_0.5_0.75/entropy_k_"
 
 
 def set_FB15K():
     cfgs.setDataset("FB15K")
-    cfgs.default_entropy_dir_path = (
-        "./csv/FB15K/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-    )
+    cfgs.default_entropy_dir_path = "./RSE_output/FB15K/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
 
 
 def set_WN18RR():
     cfgs.setDataset("WN18RR")
-    cfgs.default_entropy_dir_path = (
-        "./csv/WN18RR/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-    )
+    cfgs.default_entropy_dir_path = "./RSE_output/WN18RR/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
 
 
 def setConfig(strDataset):
     cfgs.setDataset(strDataset)
     cfgs.default_entropy_dir_path = (
-        # f"./csv/{strDataset}/DEFAULT_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-        # f"./csv/{strDataset}/PER_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-        # f"./csv/{strDataset}/AVG_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-        # f"./csv/{strDataset}/PER_PDF_Trained_0.5_0.75/entropy_k_"
-        # f"./csv/{strDataset}/FINAL_PDF_Trained_0.5_0.75/entropy_k_"
-        # f"./csv/{strDataset}/FINAL_PDF_PAIRED_Trained_0.5_0.75/entropy_k_"
-        f"./csv/{strDataset}/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
+        # f"./RSE_output/{strDataset}/DEFAULT_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
+        # f"./RSE_output/{strDataset}/PER_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
+        # f"./RSE_output/{strDataset}/AVG_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
+        # f"./RSE_output/{strDataset}/PER_PDF_Trained_0.5_0.75/entropy_k_"
+        # f"./RSE_output/{strDataset}/FINAL_PDF_Trained_0.5_0.75/entropy_k_"
+        # f"./RSE_output/{strDataset}/FINAL_PDF_PAIRED_Trained_0.5_0.75/entropy_k_"
+        f"./RSE_output/{strDataset}/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
     )
 
 
@@ -228,9 +218,7 @@ if __name__ == "__main__":
                     if "THRESHOLD" in cfgs.MODE_HPO:
                         hpo_num_threshold(transee, test_dataloader)
                     elif "MINNORM" in cfgs.MODE_HPO:
-                        util.endl(
-                            f"[{ths} - {path_id} {type_entropy} {cfgs.reverse_flag}]"
-                        )
+                        util.endl(f"[{ths} - {path_id} {type_entropy} {cfgs.reverse_flag}]")
                         print(f"--------[ Fast Mode ] : {cfgs.MODE_HPO_FAST} ")
 
                         hit10, val = recursive_evaluations(
@@ -241,9 +229,7 @@ if __name__ == "__main__":
                             None,
                         )
 
-                        print(
-                            f"\n--------[hpo Done] - {ths} - {path_id} {type_entropy} {cfgs.reverse_flag}"
-                        )
+                        print(f"\n--------[hpo Done] - {ths} - {path_id} {type_entropy} {cfgs.reverse_flag}")
                         print(f"--------[ Result ] - MIN: {val}, HIT@10: {hit10} \n")
                         # # Go Left
                     # run_evaluations(transee, test_dataloader, 0.0, "LEFT")

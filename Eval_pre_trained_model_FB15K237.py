@@ -11,14 +11,14 @@ from openke.module.strategy import NegativeSampling
 
 if __name__ == "__main__":
     cfgs.dataset = "FB15K237"
-    cfgs.data_tag = "/Pre_FB15K237"
+    data_tag = f"./basemodel/FB15K237"
     cfgs.num_count_threshold = -1
     cfgs.EVAL_DEFALT_TF = 10
 
     # print(util.get_csv_path_short())
     util.print_entropy_header()
 
-    models = util.load_models_list(tags="/Pre_FB15K237", devices=cfgs.devices)
+    models = util.load_models_list(devices=cfgs.devices)
     # models = util.load_models_list(devices="cpu")
 
     # models, dataloaders = util.load_models_loader(tags="/0925", dataset="FB15K237", devices="cpu")
@@ -32,7 +32,5 @@ if __name__ == "__main__":
             print(strModel)
             test_dataloader = TestDataLoader("./benchmarks/FB15K237/", "link")
 
-            tester = Tester(
-                model=models[strModel], data_loader=test_dataloader, use_gpu=True
-            )
+            tester = Tester(model=models[strModel], data_loader=test_dataloader, use_gpu=True)
             tester.run_link_prediction(type_constrain=False)

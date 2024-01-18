@@ -82,7 +82,7 @@ def endl_mode(strData: str = "---------"):
         )
 
 
-def transe_models(tag="", strDataset="FB15K237", devices=cfgs.devices):
+def transe_models(strDataset="FB15K237", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/FB15K237/",
@@ -105,12 +105,12 @@ def transe_models(tag="", strDataset="FB15K237", devices=cfgs.devices):
         devices=devices,
     )
 
-    transe.load_checkpoint(f".{tag}/checkpoint/transe.ckpt")
+    transe.load_checkpoint(f".basemodel/{strDataset}/transe.ckpt")
 
     return transe, train_dataloader
 
 
-def transh_models(tag, strDataset="FB15K237", devices=cfgs.devices):
+def transh_models(strDataset="FB15K237", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/FB15K237/",
@@ -133,12 +133,12 @@ def transh_models(tag, strDataset="FB15K237", devices=cfgs.devices):
         devices=devices,
     )
 
-    transh.load_checkpoint(f".{tag}/checkpoint/transh.ckpt")
+    transh.load_checkpoint(f".basemodel/{strDataset}/transh.ckpt")
 
     return transh, train_dataloader
 
 
-def transr_models(tag, strDataset="FB15K237", devices=cfgs.devices):
+def transr_models(strDataset="FB15K237", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/FB15K237/",
@@ -161,12 +161,12 @@ def transr_models(tag, strDataset="FB15K237", devices=cfgs.devices):
         rand_init=False,
         devices=devices,
     )
-    transr.load_checkpoint(f".{tag}/checkpoint/transr.ckpt")
+    transr.load_checkpoint(f".basemodel/{strDataset}/transr.ckpt")
 
     return transr, train_dataloader
 
 
-def transd_models(tag, strDataset="FB15K237", devices=cfgs.devices):
+def transd_models(strDataset="FB15K237", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/FB15K237/",
@@ -189,12 +189,12 @@ def transd_models(tag, strDataset="FB15K237", devices=cfgs.devices):
         norm_flag=True,
         devices=devices,
     )
-    transd.load_checkpoint(f".{tag}/checkpoint/transd.ckpt")
+    transd.load_checkpoint(f".basemodel/{strDataset}/transd.ckpt")
 
     return transd, train_dataloader
 
 
-def transe_models_WN(tag="", strDataset="WN18RR", devices=cfgs.devices):
+def transe_models_WN(strDataset="WN18RR", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/WN18RR/",
@@ -214,12 +214,12 @@ def transe_models_WN(tag="", strDataset="WN18RR", devices=cfgs.devices):
         norm_flag=True,
     )
 
-    transe.load_checkpoint(f".{tag}/checkpoint/transe.ckpt")
+    transe.load_checkpoint(f".basemodel/{strDataset}/transe.ckpt")
 
     return transe, train_dataloader
 
 
-def transh_models_WN(tag, strDataset="WN18RR", devices=cfgs.devices):
+def transh_models_WN(strDataset="WN18RR", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/WN18RR/",
@@ -239,12 +239,12 @@ def transh_models_WN(tag, strDataset="WN18RR", devices=cfgs.devices):
         norm_flag=True,
     )
 
-    transh.load_checkpoint(f".{tag}/checkpoint/transh.ckpt")
+    transh.load_checkpoint(f".basemodel/{strDataset}/transh.ckpt")
 
     return transh, train_dataloader
 
 
-def transr_models_WN(tag, strDataset="WN18RR", devices=cfgs.devices):
+def transr_models_WN(strDataset="WN18RR", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/WN18RR/",
@@ -264,12 +264,12 @@ def transr_models_WN(tag, strDataset="WN18RR", devices=cfgs.devices):
         norm_flag=True,
         rand_init=False,
     )
-    transr.load_checkpoint(f".{tag}/checkpoint/transr.ckpt")
+    transr.load_checkpoint(f".basemodel/{strDataset}/transr.ckpt")
 
     return transr, train_dataloader
 
 
-def transd_models_WN(tag, strDataset="WN18RR", devices=cfgs.devices):
+def transd_models_WN(strDataset="WN18RR", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/WN18RR/",
@@ -289,7 +289,7 @@ def transd_models_WN(tag, strDataset="WN18RR", devices=cfgs.devices):
         p_norm=1,
         norm_flag=True,
     )
-    transd.load_checkpoint(f".{tag}/checkpoint/transd.ckpt")
+    transd.load_checkpoint(f".basemodel/{strDataset}/transd.ckpt")
 
     return transd, train_dataloader
 
@@ -316,12 +316,12 @@ def transe_models_FB15K(tag="", strDataset="FB15K", devices=cfgs.devices):
         norm_flag=True,
     )
 
-    transe.load_checkpoint(f".{tag}/checkpoint/transe.ckpt")
+    transe.load_checkpoint(f".basemodel/{strDataset}/transe.ckpt")
 
     return transe, train_dataloader
 
 
-def transh_models_FB15K(tag, strDataset="FB15K", devices=cfgs.devices):
+def transh_models_FB15K(strDataset="FB15K", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/FB15K/",
@@ -343,12 +343,12 @@ def transh_models_FB15K(tag, strDataset="FB15K", devices=cfgs.devices):
         norm_flag=True,
     )
 
-    transh.load_checkpoint(f".{tag}/checkpoint/transh.ckpt")
+    transh.load_checkpoint(f".basemodel/{strDataset}/transh.ckpt")
 
     return transh, train_dataloader
 
 
-def transr_models_FB15K(tag, strDataset="FB15K", devices=cfgs.devices):
+def transr_models_FB15K(strDataset="FB15K", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/FB15K/",
@@ -370,12 +370,12 @@ def transr_models_FB15K(tag, strDataset="FB15K", devices=cfgs.devices):
         norm_flag=True,
         rand_init=False,
     )
-    transr.load_checkpoint(f".{tag}/checkpoint/transr.ckpt")
+    transr.load_checkpoint(f".basemodel/{strDataset}/transr.ckpt")
 
     return transr, train_dataloader
 
 
-def transd_models_FB15K(tag, strDataset="FB15K", devices=cfgs.devices):
+def transd_models_FB15K(strDataset="FB15K", devices=cfgs.devices):
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path=f"./benchmarks/FB15K/",
@@ -397,7 +397,7 @@ def transd_models_FB15K(tag, strDataset="FB15K", devices=cfgs.devices):
         p_norm=1,
         norm_flag=True,
     )
-    transd.load_checkpoint(f".{tag}/checkpoint/transd.ckpt")
+    transd.load_checkpoint(f".basemodel/{strDataset}/transd.ckpt")
 
     return transd, train_dataloader
 
@@ -495,9 +495,7 @@ def get_min_length(mode, hit, dfs):
     (print(df[df["limit"] == hit]) for df in dfs.values())
 
     if mode != "mixed_batch":
-        return min(
-            len(df[(df["mode"] == mode) & (df["limit"] == hit)]) for df in dfs.values()
-        )
+        return min(len(df[(df["mode"] == mode) & (df["limit"] == hit)]) for df in dfs.values())
 
     return min(len(df[df["limit"] == hit]) for df in dfs.values())
 
@@ -513,18 +511,13 @@ def process_df(df):
     )
 
 
-def load_models_list(
-    strModels=cfgs.strModels, tags=cfgs.data_tag, devices=cfgs.devices
-):
-    print("tag: ", tags)
-    print(cfgs.dataset)
-
+def load_models_list(strModels=cfgs.strModels, devices=cfgs.devices):
     models = {}
 
     for strModel in strModels:
         print(strModel)
 
-        model, _ = load_models[cfgs.dataset][strModel](tag=tags, devices=devices)
+        model, _ = load_models[cfgs.dataset][strModel](devices=devices)
 
         models[strModel] = model
 
@@ -533,7 +526,6 @@ def load_models_list(
 
 def load_models_loader(
     strModels=cfgs.strModels,
-    tags=cfgs.data_tag,
     dataset="FB15K237",
     devices=cfgs.devices,
 ):
@@ -541,9 +533,7 @@ def load_models_loader(
     dataloaders = {}
 
     for strModel in strModels:
-        model, train_dataloader = load_model[strModel](
-            tag=tags, strDataset=dataset, devices=devices
-        )
+        model, train_dataloader = load_model[strModel](strDataset=dataset, devices=devices)
 
         models[strModel] = model
         dataloaders[strModel] = train_dataloader
@@ -610,13 +600,9 @@ def normalize_sigmoid(
     #     plt.show()
 
     if reverse_Flag:
-        df_copy[column] = new_max - (gain * df_copy[column]).apply(expit) * (
-            new_max - new_min
-        )
+        df_copy[column] = new_max - (gain * df_copy[column]).apply(expit) * (new_max - new_min)
     else:
-        df_copy[column] = (gain * df_copy[column]).apply(expit) * (
-            new_max - new_min
-        ) + new_min
+        df_copy[column] = (gain * df_copy[column]).apply(expit) * (new_max - new_min) + new_min
 
     return df_copy
 
@@ -707,24 +693,16 @@ def normalize_logistic(
 #     return df_copy
 
 
-def min_max_normalize(
-    df_ori, column_name, new_min=-5, new_max=5, def_val=1.1, reverse_Flag=False
-):
+def min_max_normalize(df_ori, column_name, new_min=-5, new_max=5, def_val=1.1, reverse_Flag=False):
     old_min = df_ori[column_name].min()
     old_max = df_ori[column_name].max()
 
     df = df_ori.copy()
 
     if reverse_Flag:
-        df[column_name] = (
-            new_max
-            - (df[column_name] - old_min) / (old_max - old_min) * (new_max - new_min)
-        ).replace(np.nan, new_max * def_val)
+        df[column_name] = (new_max - (df[column_name] - old_min) / (old_max - old_min) * (new_max - new_min)).replace(np.nan, new_max * def_val)
     else:
-        df[column_name] = (
-            (df[column_name] - old_min) / (old_max - old_min) * (new_max - new_min)
-            + new_min
-        ).replace(np.nan, new_max * def_val)
+        df[column_name] = ((df[column_name] - old_min) / (old_max - old_min) * (new_max - new_min) + new_min).replace(np.nan, new_max * def_val)
 
     return df
 
@@ -744,10 +722,7 @@ def min_max_normalize_reverse(df_ori, column_name, new_min=-6, new_max=6, def_va
 
     df = df_ori.copy()
 
-    df[column_name] = (
-        new_max
-        - (df[column_name] - old_min) / (old_max - old_min) * (new_max - new_min)
-    ).replace(np.nan, new_max * def_val)
+    df[column_name] = (new_max - (df[column_name] - old_min) / (old_max - old_min) * (new_max - new_min)).replace(np.nan, new_max * def_val)
 
     return df
 
@@ -772,9 +747,7 @@ def get_row_relation(relation, strModels, filepath):
     result = pd.DataFrame(columns=cfgs.column_List_eval)
 
     for model in strModels:
-        cfgs.entropy_df, value_dict = get_df_from_csv(
-            cfgs.entropy_df, filepath, relation, model
-        )
+        cfgs.entropy_df, value_dict = get_df_from_csv(cfgs.entropy_df, filepath, relation, model)
 
         result = pd.concat([result, value_dict], ignore_index=True)
 
@@ -816,7 +789,7 @@ def get_csv_path_short():
 
 
 # def get_csv_path_short(dir_path):
-#     cfgs.default_entropy_dir_path = f"./csv/{dir_path}/entropy_k_"
+#     cfgs.default_entropy_dir_path = f"./RSE_output/{dir_path}/entropy_k_"
 
 #     result_path = []
 
@@ -996,9 +969,7 @@ def plots_pdf_values(tensor, probs, pdf_values):
     plt.scatter(x=tensor, y=probs, color="green", marker="o", s=10, label="Probs")
     plt.ylim([maxs * -0.2, maxs * 1.1])
 
-    plt.title(
-        f"Fitted Gaussian CDF {cfgs.CURRENT_REL} {cfgs.CURRENT_MODEL} {cfgs.CURRENT_LABEL} {tensor.size}"
-    )
+    plt.title(f"Fitted Gaussian CDF {cfgs.CURRENT_REL} {cfgs.CURRENT_MODEL} {cfgs.CURRENT_LABEL} {tensor.size}")
     plt.xlabel("Value")
     plt.legend()
 
@@ -1093,12 +1064,8 @@ def plot_gaussian(_tensor: torch.tensor, pdf_values, fitter=stats.norm):
     plt.figure(figsize=(8, 6))
     plt.plot(x, y, label="PDF")
     plt.hist(tensor, density=True, bins="auto", histtype="stepfilled", alpha=0.2)
-    plt.scatter(
-        tensor.numpy(), pdf_values, color="red", marker="o", label="Data Points"
-    )
-    plt.title(
-        f"PDF: {cfgs.CURRENT_MODEL} {cfgs.CURRENT_LABEL} {tensor.shape[0]} {cfgs.CURRENT_LABEL}"
-    )
+    plt.scatter(tensor.numpy(), pdf_values, color="red", marker="o", label="Data Points")
+    plt.title(f"PDF: {cfgs.CURRENT_MODEL} {cfgs.CURRENT_LABEL} {tensor.shape[0]} {cfgs.CURRENT_LABEL}")
     plt.xlabel("Value")
     plt.ylabel("Density")
     plt.legend()

@@ -40,30 +40,30 @@ if __name__ == "__main__":
     # print(util.get_csv_path_short())
     # input()
 
-    # cfgs.default_entropy_dir_path = "./csv/FB15K237/GOOD_PERFOMANCE/PDF_Categorical_Mixed/entropy_k_"
-    # cfgs.default_entropy_dir_path = "./csv/FB15K237/PDF_Categorical_ks_eh_Mixed_05_075/entropy_k_"
-    # cfgs.default_entropy_dir_path = "./csv/FB15K237/PDF_Categorical_ks_eh_Mixed_025_05/entropy_k_"
-    # cfgs.default_entropy_dir_path = "./csv/FB15K237/PDF_Categorical_ks_eh_Mixed_0.75_0.5/entropy_k_"
+    # cfgs.default_entropy_dir_path = "./RSE_output/FB15K237/GOOD_PERFOMANCE/PDF_Categorical_Mixed/entropy_k_"
+    # cfgs.default_entropy_dir_path = "./RSE_output/FB15K237/PDF_Categorical_ks_eh_Mixed_05_075/entropy_k_"
+    # cfgs.default_entropy_dir_path = "./RSE_output/FB15K237/PDF_Categorical_ks_eh_Mixed_025_05/entropy_k_"
+    # cfgs.default_entropy_dir_path = "./RSE_output/FB15K237/PDF_Categorical_ks_eh_Mixed_0.75_0.5/entropy_k_"
 
     # cfgs.setDataset("WN18RR")
-    # cfgs.default_entropy_dir_path = "./csv/FB15K237/PDF_Categorical_TRUE_Mixed_0.5_0.75/entropy_k_"
+    # cfgs.default_entropy_dir_path = "./RSE_output/FB15K237/PDF_Categorical_TRUE_Mixed_0.5_0.75/entropy_k_"
 
     strDataset = "FB15K"
     # strDataset = "FB15K237"
     cfgs.default_entropy_dir_path = (
-        # "./csv/FB15K237/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-        f"./csv/{strDataset}/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
-        # "./csv/FB15K237/PER_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-        # "./csv/FB15K237/TOT_PDF_Trained_0.5_0.75/entropy_k_"
-        # "./csv/FB15K237/FINAL_PDF_Trained_0.5_0.75/entropy_k_"
-        # "./csv/FB15K237/FINAL_NP_PDF_Trained_0.5_0.75/entropy_k_"
-        # "./csv/FB15K237/FINAL_PDF_PAIRED_Trained_0.5_0.75/entropy_k_"
+        # "./RSE_output/FB15K237/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
+        f"./RSE_output/{strDataset}/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
+        # "./RSE_output/FB15K237/PER_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
+        # "./RSE_output/FB15K237/TOT_PDF_Trained_0.5_0.75/entropy_k_"
+        # "./RSE_output/FB15K237/FINAL_PDF_Trained_0.5_0.75/entropy_k_"
+        # "./RSE_output/FB15K237/FINAL_NP_PDF_Trained_0.5_0.75/entropy_k_"
+        # "./RSE_output/FB15K237/FINAL_PDF_PAIRED_Trained_0.5_0.75/entropy_k_"
     )
 
     # strDataset = "WN18RR"
     # cfgs.default_entropy_dir_path = (
-    #     # f"./csv/{strDataset}/DEFAULT_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
-    #     f"./csv/{strDataset}/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
+    #     # f"./RSE_output/{strDataset}/DEFAULT_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
+    #     f"./RSE_output/{strDataset}/DROP_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
     # )
 
     cfgs.setDataset(strDataset)
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     if "WN" in strDataset:
         cfgs.hit_k_limits = [3]
 
-    # /home/kist/workspace/OpenKE/csv/FB15K/DEFAULT_RES_PDF_Categorical_Trained_0.5_0.75
+    # /home/kist/workspace/OpenKE/RSE_output/FB15K/DEFAULT_RES_PDF_Categorical_Trained_0.5_0.75
     # # dataloader for training
     # train_dataloader = TrainDataLoader(
     #     in_path="./benchmarks/FB15K237/",
@@ -155,21 +155,13 @@ if __name__ == "__main__":
                         #     cfgs.reverse_flag = False
 
                         if cfgs.WRITE_EVAL_RESULT:
-                            util.endl(
-                                f"[{ths} - {path_id} {type_entropy} {cfgs.reverse_flag}] - EVAL_RESULT Writing"
-                            )
+                            util.endl(f"[{ths} - {path_id} {type_entropy} {cfgs.reverse_flag}] - EVAL_RESULT Writing")
 
                         else:
-                            util.endl(
-                                f"[{ths} - {path_id} {type_entropy} {cfgs.reverse_flag}]"
-                            )
+                            util.endl(f"[{ths} - {path_id} {type_entropy} {cfgs.reverse_flag}]")
 
-                        tester = Tester(
-                            model=transee, data_loader=test_dataloader, use_gpu=True
-                        )
-                        (mrr, mr, hit10, hit3, hit1) = tester.run_link_prediction(
-                            type_constrain=False
-                        )
+                        tester = Tester(model=transee, data_loader=test_dataloader, use_gpu=True)
+                        (mrr, mr, hit10, hit3, hit1) = tester.run_link_prediction(type_constrain=False)
 
                         # result[f"{eval_norm_mode}-{type_entropy}"] = (
                         #     mrr,

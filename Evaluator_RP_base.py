@@ -11,13 +11,11 @@ from openke.module.model.TransEE import TransEE
 
 if __name__ == "__main__":
     strDataset = "FB15K"
-    cfgs.default_entropy_dir_path = (
-        f"./csv/{strDataset}/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
-    )
+    cfgs.default_entropy_dir_path = f"./RSE_output/{strDataset}/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
 
     cfgs.setDataset(strDataset)
 
-    models = util.load_models_list(tags=f"/Pre_{strDataset}", devices=cfgs.devices)
+    models = util.load_models_list(devices=cfgs.devices)
 
     testpaths = ["_11", "_1n", "_n1", "_nn"]
     # testpaths = ["_n1"]
@@ -39,13 +37,9 @@ if __name__ == "__main__":
             cfgs.entropy_path_id_short = path_id
             result = {}
             for strModel in cfgs.strModels:
-                tester = Tester(
-                    model=models[strModel], data_loader=test_dataloader, use_gpu=True
-                )
+                tester = Tester(model=models[strModel], data_loader=test_dataloader, use_gpu=True)
                 tester.run_link_prediction(type_constrain=False)
-                (mrr, mr, hit10, hit3, hit1) = tester.run_link_prediction(
-                    type_constrain=False
-                )
+                (mrr, mr, hit10, hit3, hit1) = tester.run_link_prediction(type_constrain=False)
 
                 result[f"{strModel}"] = hit10
 

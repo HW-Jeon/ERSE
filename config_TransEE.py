@@ -338,15 +338,11 @@ entropy_normal_min = 5.0
 # entropy_normal_min = 1.0
 
 default_entropy_dir_path = None
-# default_entropy_dir_path = "./csv/FB15K237/GOOD_PERFOMANCE/PDF_Categorical_Mixed/entropy_k_"
+# default_entropy_dir_path = "./RSE_output/FB15K237/GOOD_PERFOMANCE/PDF_Categorical_Mixed/entropy_k_"
 
 dataset = "FB15K"
 # dataset = "FB15K237"
 # dataset = "WN18RR"
-
-# data_tag = "/0925"
-data_tag = "/Pre_FB15K237"
-# data_tag = "/Pre_WN18RR"
 
 entropy_df = None
 strModels = ["TransE", "TransH", "TransR", "TransD"]
@@ -468,7 +464,7 @@ MODE_EVALUATION_TOP = False
 # EVALUATION_ENTROPY_HOLD = False
 
 WRITE_EVAL_RESULT = False
-PATH_EVAL_RESULT = "./csv/Eval_result/"
+PATH_EVAL_RESULT = "./RSE_output/Eval_result/"
 
 # Original Alpha : 0.5
 
@@ -539,7 +535,7 @@ def setDataset(strDataset):
 
     dataset = strDataset
 
-    data_tag = f"/Pre_{strDataset}"
+    data_tag = f"./basemodel/{strDataset}"
 
 
 MODE_MIN_RESOURCE = 100000

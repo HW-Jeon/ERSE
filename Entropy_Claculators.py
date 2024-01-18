@@ -136,9 +136,7 @@ def isSucessfulPredictions(top_k, result, options=True):
             return False
 
 
-def _prepare_hrt_for_functional(
-    resources, entity_id, relation_id, entity_tot, mode="tail_batch"
-):
+def _prepare_hrt_for_functional(resources, entity_id, relation_id, entity_tot, mode="tail_batch"):
     if mode == "tail_batch":
         prediction_data = {
             "batch_h": util.to_var(
@@ -192,18 +190,12 @@ def _prepare_hrt_for_functional_direct_single(entity, relation, entity_tot, mode
     return prediction
 
 
-def _predict_pretrained_model(
-    model, entity_id, relation_id, resources, entity_tot, mode="tail_batch"
-):
-    prediction_data = _prepare_hrt_for_functional(
-        resources, entity_id, relation_id, entity_tot, mode
-    )
+def _predict_pretrained_model(model, entity_id, relation_id, resources, entity_tot, mode="tail_batch"):
+    prediction_data = _prepare_hrt_for_functional(resources, entity_id, relation_id, entity_tot, mode)
 
     prediction = model.predict(prediction_data)
 
-    predicted_df = (
-        pd.DataFrame(prediction).sort_values(by=[0], ascending=True).reset_index()
-    )
+    predicted_df = pd.DataFrame(prediction).sort_values(by=[0], ascending=True).reset_index()
 
     predicted_df.rename(columns={"index": "tail_id"}, inplace=True)
     predicted_df.rename(columns={0: "score"}, inplace=True)
@@ -242,9 +234,7 @@ def predict_pretrained_model(
             if rel_index >= stopper:
                 break
 
-            results[rel_index] = pd.DataFrame(
-                columns=["entity", "relation", "Hitk", "mode"]
-            )
+            results[rel_index] = pd.DataFrame(columns=["entity", "relation", "Hitk", "mode"])
             for i, entity_index in enumerate(trained_datas[rel_index][batch]):
                 df_result = _predict_pretrained_model(
                     model_pre,
@@ -270,17 +260,11 @@ def predict_pretrained_model(
                     }
                 )
 
-                results[rel_index] = pd.concat(
-                    [results[rel_index], result], ignore_index=True
-                )
+                results[rel_index] = pd.concat([results[rel_index], result], ignore_index=True)
 
                 pbar.update(1)
 
-            results[rel_index] = (
-                results[rel_index]
-                .sort_values(by=["Hitk"], ascending=True)
-                .reset_index(drop=True)
-            )
+            results[rel_index] = results[rel_index].sort_values(by=["Hitk"], ascending=True).reset_index(drop=True)
 
     return results
 
@@ -318,9 +302,7 @@ def predict_pretrained_model_mixed(
             if rel_index >= stopper:
                 break
 
-            results[rel_index] = pd.DataFrame(
-                columns=["entity", "relation", "Hitk", "mode"]
-            )
+            results[rel_index] = pd.DataFrame(columns=["entity", "relation", "Hitk", "mode"])
             for strMode in ["tail_batch", "head_batch"]:
                 if strMode == "tail_batch":
                     batch = "batch_h"
@@ -355,9 +337,7 @@ def predict_pretrained_model_mixed(
                         }
                     )
 
-                    results[rel_index] = pd.concat(
-                        [results[rel_index], result], ignore_index=True
-                    )
+                    results[rel_index] = pd.concat([results[rel_index], result], ignore_index=True)
 
                     pbar.update(1)
 
@@ -367,11 +347,7 @@ def predict_pretrained_model_mixed(
             if cfgs.debug_flag:
                 break
 
-            results[rel_index] = (
-                results[rel_index]
-                .sort_values(by=["Hitk"], ascending=True)
-                .reset_index(drop=True)
-            )
+            results[rel_index] = results[rel_index].sort_values(by=["Hitk"], ascending=True).reset_index(drop=True)
 
             # pd.set_option("display.max_rows", None)
             # print(results[rel_index])
@@ -394,9 +370,7 @@ def pretrained_results(stopper=cfgs.rel_stopper_index):
     result = {}
 
     for strModel in cfgs.strModels:
-        model, train_dataloader = util.load_models[cfgs.dataset][strModel](
-            cfgs.data_tag
-        )
+        model, train_dataloader = util.load_models[cfgs.dataset][strModel](cfgs.data_tag)
 
         models[strModel] = model
 
@@ -404,9 +378,7 @@ def pretrained_results(stopper=cfgs.rel_stopper_index):
         relation_tot = train_dataloader.get_rel_tot()
 
         if cfgs.Mode_Calculator == "Read":
-            with open(
-                f"./resource_pkl/{cfgs.dataset}/{cfgs.MODE_DATA}/result.pkl", "rb"
-            ) as f:
+            with open(f"./resource_pkl/{cfgs.dataset}/{cfgs.MODE_DATA}/result.pkl", "rb") as f:
                 result = pickle.load(f)
 
         else:
@@ -423,9 +395,7 @@ def pretrained_results(stopper=cfgs.rel_stopper_index):
 
     if cfgs.Mode_Calculator == "Write":
         util.makedirs(f"./resource_pkl/{cfgs.dataset}/{cfgs.MODE_DATA}")
-        with open(
-            f"./resource_pkl/{cfgs.dataset}/{cfgs.MODE_DATA}/result.pkl", "wb"
-        ) as f:
+        with open(f"./resource_pkl/{cfgs.dataset}/{cfgs.MODE_DATA}/result.pkl", "wb") as f:
             pickle.dump(result, f)
 
     return models, result
@@ -442,14 +412,10 @@ def load_and_predict_model(args):
     relation_tot = train_dataloader.get_rel_tot()
 
     if cfgs.Mode_Calculator == "Read":
-        with open(
-            f"./resource_pkl/{cfgs.dataset}/{cfgs.MODE_DATA}/result.pkl", "rb"
-        ) as f:
+        with open(f"./resource_pkl/{cfgs.dataset}/{cfgs.MODE_DATA}/result.pkl", "rb") as f:
             result = pickle.load(f)
     else:
-        result = predict_pretrained_model_mixed(
-            model, train_dataloader, trained_datas, stopper=stopper
-        )
+        result = predict_pretrained_model_mixed(model, train_dataloader, trained_datas, stopper=stopper)
 
     torch.cuda.empty_cache()
 
@@ -509,9 +475,7 @@ def entropy_calc(
         entropies = entropyCalculator.calculate_entropie[cfgs.CALC_MODE]()
 
         # Adding entropies to result columns
-        result_columns.update(
-            {name: [value] for name, value in zip(entropy_names, entropies)}
-        )
+        result_columns.update({name: [value] for name, value in zip(entropy_names, entropies)})
 
         # Cleaning up
         del entropyCalculator
@@ -559,7 +523,7 @@ def to_csv_Entropy(result, hit, rel, strModel, tag):
     else:
         first = False
 
-    path = f"./csv/{cfgs.dataset}/{cfgs.date}_{cfgs.alpha}_{cfgs.q}"
+    path = f"./RSE_output/{cfgs.dataset}/{cfgs.date}_{cfgs.alpha}_{cfgs.q}"
 
     util.makedirs(path)
 
@@ -621,15 +585,11 @@ def save_entropy(
     # print("Save Done")
 
 
-def get_entropy_model(
-    models, pretrained_hit_ks, hit_k_limits=[100000], stopper=cfgs.rel_stopper_index
-):
+def get_entropy_model(models, pretrained_hit_ks, hit_k_limits=[100000], stopper=cfgs.rel_stopper_index):
     global entity_tot
     global relation_tot
 
-    relation_length = int(
-        (relation_tot - cfgs.Start_Index) * len(cfgs.strModels) * len(hit_k_limits) * 2
-    )
+    relation_length = int((relation_tot - cfgs.Start_Index) * len(cfgs.strModels) * len(hit_k_limits) * 2)
 
     print("Length:\t", len(cfgs.strModels) * len(hit_k_limits) * 2)
     print("Total:\t", relation_length)
@@ -671,13 +631,9 @@ def get_entropy_model(
                         count += 1
 
                         for hit in hit_k_limits:
-                            model_hits.append(
-                                [hit, val["entity"], val["Hitk"], val["mode"]]
-                            )
+                            model_hits.append([hit, val["entity"], val["Hitk"], val["mode"]])
 
-                    hits_df = pd.DataFrame(
-                        model_hits, columns=["limit", "entity", "rank", "mode"]
-                    )
+                    hits_df = pd.DataFrame(model_hits, columns=["limit", "entity", "rank", "mode"])
                     hits_df = (
                         hits_df.groupby(["limit", "entity", "mode"])["rank"]
                         .mean()
@@ -697,20 +653,14 @@ def get_entropy_model(
                         pd.set_option("display.max_rows", None)
 
                         while True:
-                            if (
-                                len(i_hits_df[i_hits_df["rank"] <= hits]) < 2000
-                                or hits == 1
-                            ):
+                            if len(i_hits_df[i_hits_df["rank"] <= hits]) < 2000 or hits == 1:
                                 break
 
                             else:
                                 hits -= 1
 
                         while True:
-                            if (
-                                len(i_hits_df[i_hits_df["rank"] <= hits]) >= 10
-                                or hits >= 20 * hit
-                            ):
+                            if len(i_hits_df[i_hits_df["rank"] <= hits]) >= 10 or hits >= 20 * hit:
                                 break
 
                             else:
@@ -722,9 +672,7 @@ def get_entropy_model(
                             hits_lists[strModel] = i_hits_df
 
                         else:
-                            hits_lists[strModel] = pd.concat(
-                                [hits_lists[strModel], i_hits_df], ignore_index=True
-                            )
+                            hits_lists[strModel] = pd.concat([hits_lists[strModel], i_hits_df], ignore_index=True)
 
                 elif cfgs.NEW_AVG == "TotPer":
                     hits = 0
@@ -733,13 +681,9 @@ def get_entropy_model(
                         count += 1
 
                         for hit in hit_k_limits:
-                            model_hits.append(
-                                [hit, val["entity"], val["Hitk"], val["mode"]]
-                            )
+                            model_hits.append([hit, val["entity"], val["Hitk"], val["mode"]])
 
-                    hits_df = pd.DataFrame(
-                        model_hits, columns=["limit", "entity", "rank", "mode"]
-                    )
+                    hits_df = pd.DataFrame(model_hits, columns=["limit", "entity", "rank", "mode"])
                     hits_df = (
                         hits_df.groupby(["limit", "entity", "mode"])["rank"]
                         .mean()
@@ -755,14 +699,11 @@ def get_entropy_model(
                     for strBatch in ["tail_batch", "head_batch"]:
                         hits = hit
 
-                        i_hits_df = hits_df[hits_df["mode"] == strBatch].reset_index(
-                            drop=True
-                        )
+                        i_hits_df = hits_df[hits_df["mode"] == strBatch].reset_index(drop=True)
 
                         lims = min(
                             max(
-                                len(i_hits_df[i_hits_df["rank"] < i_hits_df["limit"]])
-                                / len(i_hits_df),
+                                len(i_hits_df[i_hits_df["rank"] < i_hits_df["limit"]]) / len(i_hits_df),
                                 1 / len(i_hits_df),
                             ),
                             1.0,
@@ -770,13 +711,9 @@ def get_entropy_model(
 
                         # print(i_hits_df)
 
-                        i_hits_df, a = get_smallest_percentile(
-                            i_hits_df, "rank", percentile=lims
-                        )
+                        i_hits_df, a = get_smallest_percentile(i_hits_df, "rank", percentile=lims)
 
-                        i_hits_df = i_hits_df[
-                            i_hits_df["rank"] <= cfgs.NWeight * i_hits_df["limit"]
-                        ]
+                        i_hits_df = i_hits_df[i_hits_df["rank"] <= cfgs.NWeight * i_hits_df["limit"]]
 
                         min_hits[strBatch][strModel] = i_hits_df["rank"].max()
                         # print(i_hits_df)
@@ -785,9 +722,7 @@ def get_entropy_model(
                             hits_lists[strModel] = i_hits_df
 
                         else:
-                            hits_lists[strModel] = pd.concat(
-                                [hits_lists[strModel], i_hits_df], ignore_index=True
-                            )
+                            hits_lists[strModel] = pd.concat([hits_lists[strModel], i_hits_df], ignore_index=True)
                         # print(i_hits_df, min_hits[strBatch][strModel])
                         # print(strBatch, hits, "-", len(i_hits_df))
                         # input()
@@ -799,13 +734,9 @@ def get_entropy_model(
                         count += 1
 
                         for hit in hit_k_limits:
-                            model_hits.append(
-                                [hit, val["entity"], val["Hitk"], val["mode"]]
-                            )
+                            model_hits.append([hit, val["entity"], val["Hitk"], val["mode"]])
 
-                    hits_df = pd.DataFrame(
-                        model_hits, columns=["limit", "entity", "rank", "mode"]
-                    )
+                    hits_df = pd.DataFrame(model_hits, columns=["limit", "entity", "rank", "mode"])
                     hits_df = (
                         hits_df.groupby(["limit", "entity", "mode"])["rank"]
                         .mean()
@@ -821,9 +752,7 @@ def get_entropy_model(
                     for strBatch in ["tail_batch", "head_batch"]:
                         hits = hit
 
-                        i_hits_df = hits_df[hits_df["mode"] == strBatch].reset_index(
-                            drop=True
-                        )
+                        i_hits_df = hits_df[hits_df["mode"] == strBatch].reset_index(drop=True)
 
                         # print(i_hits_df)
                         # pd.set_option("display.max_rows", None)
@@ -836,9 +765,7 @@ def get_entropy_model(
                             hits_lists[strModel] = i_hits_df
 
                         else:
-                            hits_lists[strModel] = pd.concat(
-                                [hits_lists[strModel], i_hits_df], ignore_index=True
-                            )
+                            hits_lists[strModel] = pd.concat([hits_lists[strModel], i_hits_df], ignore_index=True)
 
                 elif cfgs.NEW_AVG == "Half":
                     for idx, val in pretrained_hit_ks[strModel][rel].iterrows():
@@ -851,9 +778,7 @@ def get_entropy_model(
                                     columns=["limit", "entity", "rank", "mode"],
                                 )
 
-                                hits_list = pd.concat(
-                                    [hits_list, new_row], ignore_index=True
-                                )
+                                hits_list = pd.concat([hits_list, new_row], ignore_index=True)
 
                     hits_df = (
                         hits_list.groupby(["limit", "entity", "mode"])["rank"]
@@ -894,9 +819,7 @@ def get_entropy_model(
                             hits_lists[strModel] = i_hits_df
 
                         else:
-                            hits_lists[strModel] = pd.concat(
-                                [hits_lists[strModel], i_hits_df], ignore_index=True
-                            )
+                            hits_lists[strModel] = pd.concat([hits_lists[strModel], i_hits_df], ignore_index=True)
 
                         # print(strBatch, hits, "-", len(i_hits_df))
 
@@ -912,9 +835,7 @@ def get_entropy_model(
                                     columns=["limit", "entity", "rank", "mode"],
                                 )
 
-                                hits_list = pd.concat(
-                                    [hits_list, new_row], ignore_index=True
-                                )
+                                hits_list = pd.concat([hits_list, new_row], ignore_index=True)
 
                     hits_lists[strModel] = (
                         hits_list.groupby(["limit", "entity", "mode"])["rank"]
@@ -943,9 +864,7 @@ def get_entropy_model(
                 hits_df = {}
 
                 for strModel in cfgs.strModels:
-                    filtered_model = pd.DataFrame(
-                        columns=["limit", "entity", "mode", "rank"]
-                    )
+                    filtered_model = pd.DataFrame(columns=["limit", "entity", "mode", "rank"])
 
                     # print("Source", hits_lists[strModel])
 
@@ -953,11 +872,7 @@ def get_entropy_model(
                         if nan_counts[strBatch] >= 4:
                             break
 
-                        pmin_value = min(
-                            value
-                            for value in min_hits[strBatch].values()
-                            if not math.isnan(value)
-                        )
+                        pmin_value = min(value for value in min_hits[strBatch].values() if not math.isnan(value))
                         # print(
                         #     hits_lists[strModel][
                         #         hits_lists[strModel]["mode"] == strBatch
@@ -965,14 +880,9 @@ def get_entropy_model(
                         # )
                         # print(pmin_value)
 
-                        filtered_df = hits_lists[strModel][
-                            (hits_lists[strModel]["mode"] == strBatch)
-                            & (hits_lists[strModel]["rank"] <= pmin_value)
-                        ]
+                        filtered_df = hits_lists[strModel][(hits_lists[strModel]["mode"] == strBatch) & (hits_lists[strModel]["rank"] <= pmin_value)]
 
-                        filtered_model = pd.concat(
-                            [filtered_model, filtered_df], ignore_index=True
-                        )
+                        filtered_model = pd.concat([filtered_model, filtered_df], ignore_index=True)
                         # print("Result", filtered_df)
                         # input()
 
@@ -997,15 +907,10 @@ def get_entropy_model(
                 # input()
 
             for strModel in cfgs.strModels:
-                hits_lists[strModel] = hits_lists[strModel].astype(
-                    {"limit": int, "entity": int, "mode": object, "rank": int}
-                )
+                hits_lists[strModel] = hits_lists[strModel].astype({"limit": int, "entity": int, "mode": object, "rank": int})
 
             for hit in hit_k_limits:
-                min_length = {
-                    strBatch: util.get_min_length(strBatch, hit, hits_lists)
-                    for strBatch in ["tail_batch", "head_batch"]
-                }
+                min_length = {strBatch: util.get_min_length(strBatch, hit, hits_lists) for strBatch in ["tail_batch", "head_batch"]}
                 cfgs.bins = {"tail_batch": None, "head_batch": None}
                 cfgs.CURRENT_HIT = hit
 
@@ -1038,9 +943,7 @@ def get_entropy_model(
                         # print(hits_lists[strModel], strBatch, hit, min_length)
                         # input()
 
-                        batch, correctSize = div_Target_df_single(
-                            hits_lists[strModel], strBatch, hit, min_length
-                        )
+                        batch, correctSize = div_Target_df_single(hits_lists[strModel], strBatch, hit, min_length)
 
                         if correctSize > 0:
                             mix_correctSize += correctSize
@@ -1059,9 +962,7 @@ def get_entropy_model(
                             else:
                                 cfgs.CURRENT_PAIRD = "Paired"
 
-                            trained_resource[strBatch] = model.predict_entropy(
-                                _batch
-                            ).squeeze(1)
+                            trained_resource[strBatch] = model.predict_entropy(_batch).squeeze(1)
 
                             save_entropy(
                                 trained_resource[strBatch],
@@ -1151,11 +1052,7 @@ def get_smallest_percentile(df, column, percentile=0.1):
     # Adjust the percentage if necessary
 
     # count = 0
-    while (
-        max_value < cfgs.hit_k_limits[0] * cfgs.NWeight
-        and percentile * 1.25 <= 1
-        and percentile <= 0.2
-    ):
+    while max_value < cfgs.hit_k_limits[0] * cfgs.NWeight and percentile * 1.25 <= 1 and percentile <= 0.2:
         percentile *= 1.25
 
         threshold = df[column].quantile(percentile)
@@ -1187,9 +1084,7 @@ def _get_smallest_percentile(df, column, percentile=0.1, ntag=1000):
     subset = df[df[column] <= max_value]
 
     if len(subset) >= ntag * 2 and max_value > 1:
-        subset, max_value = _get_smallest_percentile(
-            df, column, percentile * 0.75, ntag
-        )
+        subset, max_value = _get_smallest_percentile(df, column, percentile * 0.75, ntag)
 
     return subset, max_value
 

@@ -7,8 +7,12 @@ from openke.module.loss import MarginLoss
 from openke.module.model import TransD, TransE, TransH, TransR
 from openke.module.strategy import NegativeSampling
 
+strDataset = "FB15K237"
 
 def TransEs():
+    
+    global strDataset
+    
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path="./benchmarks/FB15K237/",
@@ -44,22 +48,23 @@ def TransEs():
     trainer = Trainer(
         model=model,
         data_loader=train_dataloader,
-        train_times=2500,
+        train_times=1000,
         alpha=1.0,
         use_gpu=True,
     )
     trainer.run()
-    transe.save_checkpoint("./checkpoint/transe.ckpt")
+    transe.save_checkpoint(f"./basemodel/{strDataset}/transe.ckpt")
 
     # test the model
-    transe.load_checkpoint("./checkpoint/transe.ckpt")
+    transe.load_checkpoint(f"./basemodel/{strDataset}/transe.ckpt")
     tester = Tester(model=transe, data_loader=test_dataloader, use_gpu=True)
     tester.run_link_prediction(type_constrain=False)
 
-    transe.save_parameters("./result/transe.json")
+    transe.save_parameters(f"./basemodel/{strDataset}/transe.json")
 
 
 def TransHs():
+    global strDataset
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path="./benchmarks/FB15K237/",
@@ -95,22 +100,23 @@ def TransHs():
     trainer = Trainer(
         model=model,
         data_loader=train_dataloader,
-        train_times=2500,
+        train_times=1000,
         alpha=0.5,
         use_gpu=True,
     )
     trainer.run()
-    transh.save_checkpoint("./checkpoint/transh.ckpt")
+    transh.save_checkpoint(f"./basemodel/{strDataset}/transh.ckpt")
 
     # test the model
-    transh.load_checkpoint("./checkpoint/transh.ckpt")
+    transh.load_checkpoint(f"./basemodel/{strDataset}/transh.ckpt")
     tester = Tester(model=transh, data_loader=test_dataloader, use_gpu=True)
     tester.run_link_prediction(type_constrain=False)
 
-    transh.save_parameters("./result/transh.json")
+    transh.save_parameters(f"./basemodel/{strDataset}/transh.json")
 
 
 def TransRs():
+    global strDataset
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path="./benchmarks/FB15K237/",
@@ -163,36 +169,37 @@ def TransRs():
     trainer = Trainer(
         model=model_e,
         data_loader=train_dataloader,
-        train_times=2500,
+        train_times=1000,
         alpha=0.5,
         use_gpu=True,
     )
     trainer.run()
     parameters = transe.get_parameters()
-    transe.save_parameters("./result/transr_transe.json")
+    transe.save_parameters(f"./basemodel/{strDataset}/transr_transe.json")
 
     # train transr
     transr.set_parameters(parameters)
     trainer = Trainer(
         model=model_r,
         data_loader=train_dataloader,
-        train_times=2500,
+        train_times=1000,
         alpha=1.0,
         use_gpu=True,
     )
     trainer.run()
-    transr.save_checkpoint("./checkpoint/transr.ckpt")
+    transr.save_checkpoint(f"./basemodel/{strDataset}/transr.ckpt")
 
     # test the model
-    transr.load_checkpoint("./checkpoint/transr.ckpt")
+    transr.load_checkpoint(f"./basemodel/{strDataset}/transr.ckpt")
     tester = Tester(model=transr, data_loader=test_dataloader, use_gpu=True)
     tester.run_link_prediction(type_constrain=False)
 
     parameters = transr.get_parameters()
-    transr.save_parameters("./result/transr.json")
+    transr.save_parameters(f"./basemodel/{strDataset}/transr.json")
 
 
 def TransDs():
+    global strDataset
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path="./benchmarks/FB15K237/",
@@ -229,19 +236,19 @@ def TransDs():
     trainer = Trainer(
         model=model,
         data_loader=train_dataloader,
-        train_times=2500,
+        train_times=1000,
         alpha=1.0,
         use_gpu=True,
     )
     trainer.run()
-    transd.save_checkpoint("./checkpoint/transd.ckpt")
+    transd.save_checkpoint(f"./basemodel/{strDataset}/transd.ckpt")
 
     # test the model
-    transd.load_checkpoint("./checkpoint/transd.ckpt")
+    transd.load_checkpoint(f"./basemodel/{strDataset}/transd.ckpt")
     tester = Tester(model=transd, data_loader=test_dataloader, use_gpu=True)
     tester.run_link_prediction(type_constrain=False)
 
-    transd.save_parameters("./result/transd.json")
+    transd.save_parameters(f"./basemodel/{strDataset}/transd.json")
 
 
 if __name__ == "__main__":
