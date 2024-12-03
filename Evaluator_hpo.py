@@ -113,7 +113,7 @@ def setConfig(strDataset):
         # f"./RSE_output/{strDataset}/PER_PDF_Trained_0.5_0.75/entropy_k_"
         # f"./RSE_output/{strDataset}/FINAL_PDF_Trained_0.5_0.75/entropy_k_"
         # f"./RSE_output/{strDataset}/FINAL_PDF_PAIRED_Trained_0.5_0.75/entropy_k_"
-        f"./RSE_output/{strDataset}/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
+        f"./RSE_output/{strDataset}/T1_Trained_0.5_0.75/entropy_k_"
     )
 
 
@@ -172,6 +172,7 @@ if __name__ == "__main__":
 
     # cfgs.WRITE_EVAL_RESULT = True
     for eval_norm_mode in ["MINMAX", "LOGIT"]:
+        # for eval_norm_mode in ["LOGIT"]:
         cfgs.MODE_EVAL_NORM = eval_norm_mode
 
         for ths in cfgs.num_count_thresholds:

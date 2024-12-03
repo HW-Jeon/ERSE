@@ -25,12 +25,13 @@ if __name__ == "__main__":
 
     # print("Loading models Done")
 
-    for path_id in util.get_csv_path_short():
-        cfgs.entropy_path_id_short = path_id
+    # for path_id in util.get_csv_path_short():
+    #     cfgs.entropy_path_id_short = path_id
 
-        for strModel in cfgs.strModels:
-            print(strModel)
-            test_dataloader = TestDataLoader("./benchmarks/FB15K237/", "link")
+    # for strModel in cfgs.strModels:
+    for strModel in ["TransR"]:
+        print("Eval: ", strModel)
+        test_dataloader = TestDataLoader("./benchmarks/FB15K237/", "link")
 
-            tester = Tester(model=models[strModel], data_loader=test_dataloader, use_gpu=True)
-            tester.run_link_prediction(type_constrain=False)
+        tester = Tester(model=models[strModel], data_loader=test_dataloader, use_gpu=True, pre_train=True)
+        tester.run_link_prediction(type_constrain=False)

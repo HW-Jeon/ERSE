@@ -1,6 +1,7 @@
 import torch
 
 import openke
+import utilities as util
 from openke.config import Tester, Trainer
 from openke.data import TestDataLoader, TrainDataLoader
 from openke.module.loss import MarginLoss
@@ -9,10 +10,10 @@ from openke.module.strategy import NegativeSampling
 
 strDataset = "FB15K237"
 
+
 def TransEs():
-    
     global strDataset
-    
+
     # dataloader for training
     train_dataloader = TrainDataLoader(
         in_path="./benchmarks/FB15K237/",
@@ -53,11 +54,12 @@ def TransEs():
         use_gpu=True,
     )
     trainer.run()
+
     transe.save_checkpoint(f"./basemodel/{strDataset}/transe.ckpt")
 
     # test the model
     transe.load_checkpoint(f"./basemodel/{strDataset}/transe.ckpt")
-    tester = Tester(model=transe, data_loader=test_dataloader, use_gpu=True)
+    tester = Tester(model=transe, data_loader=test_dataloader, use_gpu=True, pre_train=True)
     tester.run_link_prediction(type_constrain=False)
 
     transe.save_parameters(f"./basemodel/{strDataset}/transe.json")
@@ -109,7 +111,7 @@ def TransHs():
 
     # test the model
     transh.load_checkpoint(f"./basemodel/{strDataset}/transh.ckpt")
-    tester = Tester(model=transh, data_loader=test_dataloader, use_gpu=True)
+    tester = Tester(model=transh, data_loader=test_dataloader, use_gpu=True, pre_train=True)
     tester.run_link_prediction(type_constrain=False)
 
     transh.save_parameters(f"./basemodel/{strDataset}/transh.json")
@@ -130,9 +132,7 @@ def TransRs():
     )
 
     # dataloader for test
-    test_dataloader = TestDataLoader(
-        in_path="./benchmarks/FB15K237/", sampling_mode="link"
-    )
+    test_dataloader = TestDataLoader(in_path="./benchmarks/FB15K237/", sampling_mode="link")
 
     # define the model
     transe = TransE(
@@ -191,7 +191,7 @@ def TransRs():
 
     # test the model
     transr.load_checkpoint(f"./basemodel/{strDataset}/transr.ckpt")
-    tester = Tester(model=transr, data_loader=test_dataloader, use_gpu=True)
+    tester = Tester(model=transr, data_loader=test_dataloader, use_gpu=True, pre_train=True)
     tester.run_link_prediction(type_constrain=False)
 
     parameters = transr.get_parameters()
@@ -245,13 +245,15 @@ def TransDs():
 
     # test the model
     transd.load_checkpoint(f"./basemodel/{strDataset}/transd.ckpt")
-    tester = Tester(model=transd, data_loader=test_dataloader, use_gpu=True)
+    tester = Tester(model=transd, data_loader=test_dataloader, use_gpu=True, pre_train=True)
     tester.run_link_prediction(type_constrain=False)
 
     transd.save_parameters(f"./basemodel/{strDataset}/transd.json")
 
 
 if __name__ == "__main__":
+    util.makedirs(f"./basemodel/{strDataset}")
+
     TransEs()
     torch.cuda.empty_cache()
     TransHs()

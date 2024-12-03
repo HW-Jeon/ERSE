@@ -375,9 +375,9 @@ num_count_threshold = 0
 # -2: choose best rank model
 # -1: all weights are 1
 # num_count_thresholds = [-2, -1]
-# num_count_thresholds = [5]
+num_count_thresholds = [5]
 # num_count_thresholds = [-3]
-num_count_thresholds = [-1]
+# num_count_thresholds = [-1]
 
 types_of_entropy = "n_shannon"
 
@@ -535,7 +535,7 @@ def setDataset(strDataset):
 
     dataset = strDataset
 
-    data_tag = f"./basemodel/{strDataset}"
+    data_tag = f"{strDataset}"
 
 
 MODE_MIN_RESOURCE = 100000

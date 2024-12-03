@@ -105,7 +105,7 @@ def transe_models(strDataset="FB15K237", devices=cfgs.devices):
         devices=devices,
     )
 
-    transe.load_checkpoint(f".basemodel/{strDataset}/transe.ckpt")
+    transe.load_checkpoint(f"./basemodel/{strDataset}/transe.ckpt")
 
     return transe, train_dataloader
 
@@ -133,7 +133,7 @@ def transh_models(strDataset="FB15K237", devices=cfgs.devices):
         devices=devices,
     )
 
-    transh.load_checkpoint(f".basemodel/{strDataset}/transh.ckpt")
+    transh.load_checkpoint(f"./basemodel/{strDataset}/transh.ckpt")
 
     return transh, train_dataloader
 
@@ -161,7 +161,7 @@ def transr_models(strDataset="FB15K237", devices=cfgs.devices):
         rand_init=False,
         devices=devices,
     )
-    transr.load_checkpoint(f".basemodel/{strDataset}/transr.ckpt")
+    transr.load_checkpoint(f"./basemodel/{strDataset}/transr.ckpt")
 
     return transr, train_dataloader
 
@@ -189,7 +189,7 @@ def transd_models(strDataset="FB15K237", devices=cfgs.devices):
         norm_flag=True,
         devices=devices,
     )
-    transd.load_checkpoint(f".basemodel/{strDataset}/transd.ckpt")
+    transd.load_checkpoint(f"./basemodel/{strDataset}/transd.ckpt")
 
     return transd, train_dataloader
 
@@ -214,7 +214,7 @@ def transe_models_WN(strDataset="WN18RR", devices=cfgs.devices):
         norm_flag=True,
     )
 
-    transe.load_checkpoint(f".basemodel/{strDataset}/transe.ckpt")
+    transe.load_checkpoint(f"./basemodel/{strDataset}/transe.ckpt")
 
     return transe, train_dataloader
 
@@ -239,7 +239,7 @@ def transh_models_WN(strDataset="WN18RR", devices=cfgs.devices):
         norm_flag=True,
     )
 
-    transh.load_checkpoint(f".basemodel/{strDataset}/transh.ckpt")
+    transh.load_checkpoint(f"./basemodel/{strDataset}/transh.ckpt")
 
     return transh, train_dataloader
 
@@ -264,7 +264,7 @@ def transr_models_WN(strDataset="WN18RR", devices=cfgs.devices):
         norm_flag=True,
         rand_init=False,
     )
-    transr.load_checkpoint(f".basemodel/{strDataset}/transr.ckpt")
+    transr.load_checkpoint(f"./basemodel/{strDataset}/transr.ckpt")
 
     return transr, train_dataloader
 
@@ -289,7 +289,7 @@ def transd_models_WN(strDataset="WN18RR", devices=cfgs.devices):
         p_norm=1,
         norm_flag=True,
     )
-    transd.load_checkpoint(f".basemodel/{strDataset}/transd.ckpt")
+    transd.load_checkpoint(f"./basemodel/{strDataset}/transd.ckpt")
 
     return transd, train_dataloader
 
@@ -316,7 +316,7 @@ def transe_models_FB15K(tag="", strDataset="FB15K", devices=cfgs.devices):
         norm_flag=True,
     )
 
-    transe.load_checkpoint(f".basemodel/{strDataset}/transe.ckpt")
+    transe.load_checkpoint(f"./basemodel/{strDataset}/transe.ckpt")
 
     return transe, train_dataloader
 
@@ -343,7 +343,7 @@ def transh_models_FB15K(strDataset="FB15K", devices=cfgs.devices):
         norm_flag=True,
     )
 
-    transh.load_checkpoint(f".basemodel/{strDataset}/transh.ckpt")
+    transh.load_checkpoint(f"./basemodel/{strDataset}/transh.ckpt")
 
     return transh, train_dataloader
 
@@ -370,7 +370,7 @@ def transr_models_FB15K(strDataset="FB15K", devices=cfgs.devices):
         norm_flag=True,
         rand_init=False,
     )
-    transr.load_checkpoint(f".basemodel/{strDataset}/transr.ckpt")
+    transr.load_checkpoint(f"./basemodel/{strDataset}/transr.ckpt")
 
     return transr, train_dataloader
 
@@ -397,7 +397,7 @@ def transd_models_FB15K(strDataset="FB15K", devices=cfgs.devices):
         p_norm=1,
         norm_flag=True,
     )
-    transd.load_checkpoint(f".basemodel/{strDataset}/transd.ckpt")
+    transd.load_checkpoint(f"./basemodel/{strDataset}/transd.ckpt")
 
     return transd, train_dataloader
 

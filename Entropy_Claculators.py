@@ -692,10 +692,6 @@ def get_entropy_model(models, pretrained_hit_ks, hit_k_limits=[100000], stopper=
                         .reset_index(drop=True)
                     )
 
-                    # print(len(hits_df))
-
-                    # hits_lists[strModel]
-
                     for strBatch in ["tail_batch", "head_batch"]:
                         hits = hit
 
@@ -709,7 +705,7 @@ def get_entropy_model(models, pretrained_hit_ks, hit_k_limits=[100000], stopper=
                             1.0,
                         )
 
-                        # print(i_hits_df)
+                        # print(lims)
 
                         i_hits_df, a = get_smallest_percentile(i_hits_df, "rank", percentile=lims)
 
@@ -723,8 +719,10 @@ def get_entropy_model(models, pretrained_hit_ks, hit_k_limits=[100000], stopper=
 
                         else:
                             hits_lists[strModel] = pd.concat([hits_lists[strModel], i_hits_df], ignore_index=True)
+
+                        # pd.set_option('display.max_rows', None)
                         # print(i_hits_df, min_hits[strBatch][strModel])
-                        # print(strBatch, hits, "-", len(i_hits_df))
+                        # print(strModel, strBatch, hits, "-", len(i_hits_df))
                         # input()
 
                 elif cfgs.NEW_AVG == "Pers":
@@ -845,6 +843,10 @@ def get_entropy_model(models, pretrained_hit_ks, hit_k_limits=[100000], stopper=
                         .reset_index(drop=True)
                     )
 
+            # for strModel in cfgs.strModels:
+            #     print(hits_lists[strModel])
+            # input()
+
             if cfgs.MIN_HIT_PAIRED:
                 nan_counts = {}
 
@@ -856,7 +858,7 @@ def get_entropy_model(models, pretrained_hit_ks, hit_k_limits=[100000], stopper=
 
                     nan_counts[strBatch] = nan_count
 
-                #     print(min_hits[strBatch])
+                    # print(min_hits[strBatch])
 
                 # print(nan_counts)
                 # input()
@@ -888,23 +890,71 @@ def get_entropy_model(models, pretrained_hit_ks, hit_k_limits=[100000], stopper=
 
                     hits_lists[strModel] = filtered_model
 
-                # t_min = min()
+                    # pd.set_option("display.max_rows", None)
+                    # print(hits_lists[strModel])
+                    # print(hits_lists[strModel].dtypes)
+                    # input()
 
-                # hits_lists[strModel] = hits_lists[strModel][hits_lists[strModel]["rank"]<hit]
+            # if cfgs.MIN_HIT_PAIRED:
+            #     nan_counts = {}
 
-                # print(hits_lists[strModel])
-                # input()
+            #     for strBatch in ["tail_batch", "head_batch"]:
+            #         nan_count = 0
+            #         for value in min_hits[strBatch].values():
+            #             if np.isnan(value):
+            #                 nan_count += 1
 
-                # for hit in hit_k_limits:
-                #     print(hits_lists[strModel][hits_lists[strModel]["limit"] == hit])
+            #         nan_counts[strBatch] = nan_count
 
-                # input()
+            #     #     print(min_hits[strBatch])
 
-                # util.endl_time("Init pre done")
+            #     # print(nan_counts)
+            #     # input()
 
-                # pd.set_option("display.max_rows", None)
-                # print(hits_lists[strModel])
-                # input()
+            #     hits_df = {}
+
+            #     for strModel in cfgs.strModels:
+            #         filtered_model = pd.DataFrame(columns=["limit", "entity", "mode", "rank"])
+
+            #         # print("Source", hits_lists[strModel])
+
+            #         for strBatch in ["tail_batch", "head_batch"]:
+            #             if nan_counts[strBatch] >= 4:
+            #                 break
+
+            #             pmin_value = min(value for value in min_hits[strBatch].values() if not math.isnan(value))
+            #             # print(
+            #             #     hits_lists[strModel][
+            #             #         hits_lists[strModel]["mode"] == strBatch
+            #             #     ]
+            #             # )
+            #             # print(pmin_value)
+
+            #             filtered_df = hits_lists[strModel][(hits_lists[strModel]["mode"] == strBatch) & (hits_lists[strModel]["rank"] <= pmin_value)]
+
+            #             filtered_model = pd.concat([filtered_model, filtered_df], ignore_index=True)
+            #             # print("Result", filtered_df)
+            #             # input()
+
+            #         hits_lists[strModel] = filtered_model
+
+            #         # t_min = min()
+
+            #         # hits_lists[strModel] = hits_lists[strModel][hits_lists[strModel]["rank"]<hit]
+
+            #         # print(hits_lists[strModel])
+            #         # input()
+
+            #         # for hit in hit_k_limits:
+            #         #     print(hits_lists[strModel][hits_lists[strModel]["limit"] == hit])
+
+            #         # input()
+
+            #         # util.endl_time("Init pre done")
+
+            #         # pd.set_option("display.max_rows", None)
+            #         print(strModel, hits_lists[strModel])
+            #         input()
 
             for strModel in cfgs.strModels:
                 hits_lists[strModel] = hits_lists[strModel].astype({"limit": int, "entity": int, "mode": object, "rank": int})
@@ -1176,10 +1226,10 @@ if __name__ == "__main__":
     cfgs.change_Hit_Mode("TotPer")
     # cfgs.change_Hit_Mode("None")
 
-    cfgs.MIN_HIT_PAIRED = False
+    cfgs.MIN_HIT_PAIRED = True
     print(cfgs.NEW_AVG)
 
-    types = "TT"
+    types = "T1"
     for ds in ["FB15K237", "FB15K", "WN18RR"]:
         # for ds in ["WN18RR"]:
         run_set(

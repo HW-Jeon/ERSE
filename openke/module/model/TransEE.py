@@ -29,7 +29,7 @@ class TransEE(Model):
         self.ent_embeddings = nn.Embedding(self.ent_tot, self.dim, device=devices)
         self.rel_embeddings = nn.Embedding(self.rel_tot, self.dim, device=devices)
 
-        self.models = util.load_models_list(devices=cfgs.devices, tags=cfgs.data_tag)
+        self.models = util.load_models_list(devices=cfgs.devices)
         self.setEntropy_from_csv()
 
     def setEntropy_from_csv(self):
@@ -49,13 +49,9 @@ class TransEE(Model):
                 columns=["score"],
             )
 
-            score[strModel] = util.min_max_normalize(
-                _score, "score", cfgs.normal_min, cfgs.normal_max
-            )["score"]
+            score[strModel] = util.min_max_normalize(_score, "score", cfgs.normal_min, cfgs.normal_max)["score"]
 
-            rank[strModel] = pd.DataFrame(
-                [score[strModel].rank(ascending=True).iloc[cfgs.ground[mode]]]
-            )
+            rank[strModel] = pd.DataFrame([score[strModel].rank(ascending=True).iloc[cfgs.ground[mode]]])
 
         return score, rank
 
@@ -100,9 +96,7 @@ class TransEE(Model):
 
         # if cfgs.num_count_threshold > -2:
         if cfgs.num_count_threshold == -2:
-            row_sums = pre_scores[
-                pre_scores.iloc[cfgs.ground[mode]].idxmin()
-            ].to_frame()
+            row_sums = pre_scores[pre_scores.iloc[cfgs.ground[mode]].idxmin()].to_frame()
         elif entropy_score is None or cfgs.num_count_threshold == -1:
             row_sums = pre_scores
         elif entropy_score is not None:
@@ -159,20 +153,14 @@ class TransEE(Model):
             #     )
             # )
 
-            normalize_entropy_score.rename(
-                columns={cfgs.types_of_entropy: "entropy_value"}, inplace=True
-            )
+            normalize_entropy_score.rename(columns={cfgs.types_of_entropy: "entropy_value"}, inplace=True)
 
             if cfgs.num_count_threshold >= 0:
                 if cfgs.MODE_EVALUATION_TOP:
-                    row_sums = self.calculate_weighted_resource(
-                        pre_scores, normalize_entropy_score, True
-                    )
+                    row_sums = self.calculate_weighted_resource(pre_scores, normalize_entropy_score, True)
 
                 else:
-                    row_sums = self.calculate_weighted_resource(
-                        pre_scores, normalize_entropy_score
-                    )
+                    row_sums = self.calculate_weighted_resource(pre_scores, normalize_entropy_score)
 
                 # row_sums = self.calculate_weighted_resource(pre_scores, normalize_entropy_score).sum(axis=1)
 
@@ -186,9 +174,7 @@ class TransEE(Model):
                             rr,
                             nums,
                             ranks,
-                            normalize_entropy_score.set_index("model")
-                            .T.rename(columns=lambda x: "ent_" + x)
-                            .reset_index(drop=True),
+                            normalize_entropy_score.set_index("model").T.rename(columns=lambda x: "ent_" + x).reset_index(drop=True),
                         ],
                         axis=1,
                     )

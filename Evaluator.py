@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import pandas as pd
 import torch
 
 import config_TransEE as cfgs
@@ -26,8 +29,10 @@ if __name__ == "__main__":
         # "./RSE_output/FB15K237/PER_RES_PDF_Categorical_Trained_0.5_0.75/entropy_k_"
         # "./RSE_output/FB15K237/TOT_PDF_Trained_0.5_0.75/entropy_k_"
         # "./RSE_output/FB15K237/FINAL_PDF_Trained_0.5_0.75/entropy_k_"
-        "./RSE_output/FB15K237/FINAL_N_PDF_Trained_0.5_0.75/entropy_k_"
+        # "./RSE_output/FB15K237/RUN_Trained_0.5_0.75/entropy_k_"
+        # "./RSE_output/FB15K237/Second_Trained_0.5_0.75/entropy_k_"
         # "./RSE_output/FB15K237/FINAL_PDF_PAIRED_Trained_0.5_0.75/entropy_k_"
+        "./RSE_output/FB15K237/T1_Trained_0.5_0.75/entropy_k_"
     )
 
     # strDataset = "WN18RR"
@@ -64,6 +69,7 @@ if __name__ == "__main__":
     # input()
 
     # define the model
+
     transee = TransEE(
         ent_tot=train_dataloader.get_ent_tot(),
         rel_tot=train_dataloader.get_rel_tot(),
@@ -75,6 +81,43 @@ if __name__ == "__main__":
     # cfgs.WRITE_EVAL_RESULT = True
 
     # for eval_norm_mode in ["LOGIT"]:
+
+    EvaluationResult = pd.DataFrame(
+        columns=[
+            "Mode",
+            "MMR",
+            "MR",
+            "Hits@1",
+            "Hits@3",
+            "Hits@10",
+        ]
+    )
+
+    # # # # # # # # # # # # # # GROUND # # # # # # # # # # # # # #
+
+    cfgs.num_count_threshold = -1
+    cfgs.entropy_path_id_short = util.get_csv_path_short()[0]
+    tester = Tester(model=transee, data_loader=test_dataloader, use_gpu=True)
+    mrr, mr, hit10, hit3, hit1 = tester.run_link_prediction(type_constrain=False)
+
+    EvaluationResult = pd.concat(
+        [
+            EvaluationResult,
+            pd.DataFrame(
+                {
+                    "Mode": ["GROUND"],
+                    "MMR": [mrr],
+                    "MR": [mr],
+                    "Hits@1": [hit1],
+                    "Hits@3": [hit3],
+                    "Hits@10": [hit10],
+                },
+            ),
+        ],
+    )
+
+    # # # # # # # # # # # # # # Eval # # # # # # # # # # # # # #
+
     for eval_norm_mode in ["MINMAX", "LOGIT"]:
         cfgs.MODE_EVAL_NORM = eval_norm_mode
 
@@ -151,8 +194,23 @@ if __name__ == "__main__":
                         util.endl(f"[{ths} - {path_id} {type_entropy} {cfgs.reverse_flag}]")
 
                     tester = Tester(model=transee, data_loader=test_dataloader, use_gpu=True)
-                    tester.run_link_prediction(type_constrain=False)
+                    mrr, mr, hit10, hit3, hit1 = tester.run_link_prediction(type_constrain=False)
 
+                    EvaluationResult = pd.concat(
+                        [
+                            EvaluationResult,
+                            pd.DataFrame(
+                                {
+                                    "Mode": [type_entropy],
+                                    "MMR": [mrr],
+                                    "MR": [mr],
+                                    "Hits@1": [hit1],
+                                    "Hits@3": [hit3],
+                                    "Hits@10": [hit10],
+                                },
+                            ),
+                        ],
+                    )
                     util.endl("GROUND_SCORE")
 
                     print(cfgs.GROUND_SCORE)
@@ -173,3 +231,24 @@ if __name__ == "__main__":
                     break
 
                 cfgs.WRITE_EVAL_RESULT = False
+
+            if cfgs.num_count_threshold < 0:
+                break
+
+    # result.to_csv
+
+    print(EvaluationResult)
+
+    path = f"./Evaluation_Results/{strDataset}"
+
+    util.makedirs(path)
+
+    dt = datetime.now()
+    result = dt.strftime("%Y%m%d-%H%M")
+
+    EvaluationResult.to_csv(
+        f"{path}/{result}.csv",
+        mode="a",
+        index=False,
+        header=True,
+    )
